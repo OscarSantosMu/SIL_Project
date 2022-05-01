@@ -19,3 +19,4 @@ Project Description: Our project consists of the creation of virtual educational
 
 * [Oscar Santos](https://github.com/OscarSantos98/)
 * [David Lázaro Fernández](https://github.com/David-Lazaro-Fernandez)
+* [Manuel Ortiz](https://github.com/ManuOSMx)
