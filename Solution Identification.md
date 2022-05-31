@@ -21,19 +21,23 @@
  - **Customize** the things that your enviroment allows like apps, screen time, access to some tools, etc.
  
  # How will it be made? 👨🏽‍💻
-    Backend
-        - FastAPI
-        - Azure Python SDK
+- **Backend**
+  - FastAPI
+  - Azure Python SDK
 
-    FrontEnd
-        - HTML
-        - CSS
-        - React + FluentUI
+- **FrontEnd**
+  - HTML
+  - CSS
+  - React + FluentUI
 
-    Azure
-        - App Service
-        - API Management
-        - Azure Storage
+- **Azure**
+  - App Service
+  - API Management
+  - Azure Storage
+
+- **GitHub**
+  - GitHub Actions
+
     
 
  
