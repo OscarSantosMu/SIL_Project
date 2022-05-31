@@ -20,8 +20,22 @@
  - **Design** virtual enviroments as you want, from your own enviroment, to your whole classroom.
  - **Customize** the things that your enviroment allows like apps, screen time, access to some tools, etc.
  
- 
- 
+ # How will it be made? 👨🏽‍💻
+    Backend
+        - FastAPI
+        - Azure Python SDK
+
+    FrontEnd
+        - HTML
+        - CSS
+        - React + FluentUI
+
+    Azure
+        - App Service
+        - API Management
+        - Azure Storage
+    
+
  
  
  
