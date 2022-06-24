@@ -3,7 +3,7 @@
 declare UNIQUER=""
 declare LOCATION=""
 declare RESOURCES_PREFIX=""
-declare -r USAGE_HELP="Usage: ./deploy.sh -l <LOCATION> [-u <UNIQUER> -r <RESOURCES_PREFIX>]"
+declare -r USAGE_HELP="Usage: ./deploy.sh -l <LOCATION> [-u <UNIQUER> -r <RESOURCES_PREFIX>] -s <SUBSCRIPTION_ID>"
 
 _error() {
     echo "##[error] $@" 2>&1
@@ -58,14 +58,45 @@ azure_login() {
     az account set --subscription "${ARM_SUBSCRIPTION_ID}"
 }
 
-# lint_terraform() {
-#     terraform fmt -check
-#     if [ $? -ne 0 ]; then
-#         _error "Terraform files are not properly formatted!"
-#         exit 1
-#     fi
+lint_terraform() {
+    cd terraform
+    for i in $@;
+    do
+        cd $i
+        SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+        terraform fmt -check
+        if [ $? -ne 0 ]; then
+            echo "##[in folder] $SCRIPT_DIR"
+            _error "Terraform files are not properly formatted!"
+            exit 1
+        fi
+        cd ..
+    done
+    # echo "End of loop"
+    # exit 1
+}
+
+# iterate_terraform_folder() {
+#     cd terraform/
+#     for i in $@;
+#     do
+#         SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+#         echo $SCRIPT_DIR
+#         cd $i
+#         SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+#         echo $SCRIPT_DIR
+#         cd ..
+#     done
+#     echo "End of loop"
 # }
 
-# init_terrafrom() {
-#     terraform init -backend-config=storage_account_name="${TFSTATE_STORAGE_ACCOUNT_NAME}" -backend-config=container_name="${TFSTATE_STORAGE_CONTAINER_NAME}" -backend-config=key="${TFSTATE_KEY}" -backend-config=resource_group_name="${TFSTATE_RESOURCES_GROUP_NAME}"
-# }
+init_terrafrom() {
+    terraform init -backend-config=storage_account_name="${TFSTATE_STORAGE_ACCOUNT_NAME}" -backend-config=container_name="${TFSTATE_STORAGE_CONTAINER_NAME}" -backend-config=key="${TFSTATE_KEY}" -backend-config=resource_group_name="${TFSTATE_RESOURCES_GROUP_NAME}"
+}
+
+
+# azure_login
+
+# iterate_terraform_folder 'create_storage_account/' 'backup/'
+terraform_folder=$(ls -1 terraform)
+lint_terraform ${terraform_folder}
