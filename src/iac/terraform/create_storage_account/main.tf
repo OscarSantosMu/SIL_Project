@@ -19,7 +19,7 @@ resource "azurerm_resource_group" "storage_rg" {
   location = "eastus"
   tags = {
     environment = "testing"
-    project = "EduEnvironments"
+    project     = "EduEnvironments"
   }
 }
 
