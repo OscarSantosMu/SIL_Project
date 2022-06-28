@@ -43,6 +43,22 @@ if [ ${#LOCATION} -eq 0 ]; then
     exit 1
 fi
 
+# Check for programs
+if ! [ -x "$(command -v az)" ]; then
+    _error "az is not installed!"
+    exit 1
+elif ! [ -x "$(command -v jq)" ]; then
+    _error "jq is not installed!"
+    sudo apt update
+    sudo apt install -y jq
+elif ! [ -x "$(command -v terraform)" ]; then
+    _error "terraform is not installed!"
+    exit 1
+elif ! [ -x "$(command -v docker)" ]; then
+    _error "docker is not installed!"
+    exit 1
+fi
+
 # echo "${RESOURCES_PREFIX}-ServicePrincipalBash"
 
 apt_update_and_install_jq() {
@@ -102,7 +118,7 @@ init_terrafrom_with_path_local() {
     cd terraform/$1
     SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
     echo $SCRIPT_DIR
-    terraform init -backend=false
+    terraform init
 }
 
 init_terrafrom() {
@@ -130,20 +146,43 @@ destroy_terraform() {
     terraform destroy --auto-approve -var="location=${LOCATION}" -var="resources_prefix=${RESOURCES_PREFIX}"
 }
 
+destroy_terraform_with_path_local() {
+    cd terraform/$1
+    terraform destroy --auto-approve -var="location=${LOCATION}" -var="resources_prefix=${RESOURCES_PREFIX}"
+}
+
 cd_back_to_iac() {
     cd ../..
     SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
     echo $SCRIPT_DIR
 }
 
+# Azure Login
 azure_login
 
+# Verify terraform lint
 # iterate_terraform_folder 'create_storage_account/' 'backup/'
 terraform_folder=$(ls -1 terraform)
 lint_terraform ${terraform_folder}
+
+# Create storage account
 init_terrafrom_with_path_local 'create_storage_account/'
 preview_terraform
 deploy_terraform $?
 cd_back_to_iac
 
+# destroy_terraform_with_path_local 'create_storage_account/'
+# cd_back_to_iac
 
+# Start backup
+# init_terrafrom_with_path_local 'backup/'
+# cd_back_to_iac
+
+# Create docker container
+init_terrafrom_with_path_local 'docker/'
+preview_terraform
+deploy_terraform $?
+cd_back_to_iac
+
+# destroy_terraform_with_path_local 'docker/'
+# cd_back_to_iac
