@@ -16,10 +16,10 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "storage_rg" {
   name     = var.resource_group_name
-  location = "eastus"
+  location = var.location
   tags = {
     environment = "testing"
-    project = "EduEnvironments"
+    project     = "EduEnvironments"
   }
 }
 
