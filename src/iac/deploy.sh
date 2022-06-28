@@ -118,18 +118,23 @@ validate_terraform() {
 }
 
 preview_terraform() {
-    echo "Here"
-    if [ ${#RESOURCES_PREFIX} -gt 0 ]; then
-        terraform plan --detailed-exitcode -var="location=${LOCATION}" -var="resources_prefix=${RESOURCES_PREFIX}"
-    elif [[ ${#RESOURCES_PREFIX} -eq 0 && ${#UNIQUER} -gt 0 ]]; then
-        terraform plan --detailed-exitcode -var="location=${LOCATION}" -var="uniquer=${UNIQUER}"
-    else
-        terraform plan --detailed-exitcode -var="location=${LOCATION}"
-    fi
-
+    terraform plan --detailed-exitcode -var="location=${LOCATION}" -var="resources_prefix=${RESOURCES_PREFIX}"
     return $?
 }
 
+deploy_terraform() {
+    terraform apply --auto-approve -var="location=${LOCATION}" -var="resources_prefix=${RESOURCES_PREFIX}"
+}
+
+destroy_terraform() {
+    terraform destroy --auto-approve -var="location=${LOCATION}" -var="resources_prefix=${RESOURCES_PREFIX}"
+}
+
+cd_back_to_iac() {
+    cd ../..
+    SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+    echo $SCRIPT_DIR
+}
 
 azure_login
 
@@ -138,3 +143,7 @@ terraform_folder=$(ls -1 terraform)
 lint_terraform ${terraform_folder}
 init_terrafrom_with_path_local 'create_storage_account/'
 preview_terraform
+deploy_terraform $?
+cd_back_to_iac
+
+
