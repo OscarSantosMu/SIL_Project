@@ -4,6 +4,9 @@ azuresp.json
 # Local .terraform directories
 **/.terraform/*
 
+# Specific file
+.terraform.lock.hcl
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
