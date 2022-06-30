@@ -1,7 +1,7 @@
 # Prototype
 
 
-### Architecture 🗺
+### SIL Cloud Architecture 🗺
 <div>
 <img src="https://user-images.githubusercontent.com/57787993/176706050-331d2610-c2e1-4f68-9675-7cc125188861.png" width="200px" />
 <img src="https://user-images.githubusercontent.com/57787993/176706069-d72aa199-e8f6-49ab-82af-9fd8d350faa5.png" width="200px" />
